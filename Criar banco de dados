@@ -1,0 +1,44 @@
+-- Criação do Banco de Dados (opcional, pode ser criado manualmente)
+CREATE DATABASE IF NOT EXISTS gerenciador_tarefas;
+
+-- Seleciona o banco de dados para uso
+USE gerenciador_tarefas;
+
+-- Tabela de Usuários
+-- Armazena os dados dos usuários que podem cadastrar tarefas.
+CREATE TABLE IF NOT EXISTS Usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    email VARCHAR(255) NOT NULL UNIQUE
+);
+
+
+-- Tabela de Tarefas
+-- Armazena todas as tarefas cadastradas, com seus respectivos detalhes e status.
+CREATE TABLE IF NOT EXISTS Tarefas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    descricao TEXT NOT NULL,
+    setor VARCHAR(100) NOT NULL,
+    prioridade ENUM('baixa', 'média', 'alta') NOT NULL,
+    data_cadastro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    status ENUM('a fazer', 'fazendo', 'pronto') NOT NULL DEFAULT 'a fazer',
+    FOREIGN KEY (usuario_id) REFERENCES Usuarios(id) ON DELETE CASCADE
+);
+
+
+-- Inserindo dados de exemplo para popular o sistema (opcional)
+-- Usuários
+INSERT INTO Usuarios (nome, email) VALUES
+('Usuário A', 'usuario.a@email.com'),
+('Usuário B', 'usuario.b@email.com'),
+('Usuário C', 'usuario.c@email.com'),
+('Usuário D', 'usuario.d@email.com');
+
+
+-- Tarefas
+INSERT INTO Tarefas (usuario_id, descricao, setor, prioridade, status) VALUES
+(1, 'Descrição da tarefa de Alta Prioridade', 'Setor Y', 'alta', 'a fazer'),
+(2, 'Descrição da tarefa 1', 'Setor J', 'média', 'a fazer'),
+(3, 'Descrição da tarefa de Baixa Prioridade', 'Setor F', 'baixa', 'fazendo'),
+(4, 'Descrição da tarefa concluída', 'Setor H', 'média', 'pronto');
